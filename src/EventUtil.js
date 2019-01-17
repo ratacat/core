@@ -20,8 +20,13 @@ class EventUtil {
    * @param {net.Socket} socket
    * @return {function (string)}
    */
-  static genSay(socket) {
-    return string => socket.write(sty.parse(string + '\r\n'));
+  static genSay(socket, noparse=false) {
+    if (noparse) {
+      return string => socket.write(string + '\r\n');
+    } else {
+      return string => socket.write(sty.parse(string + '\r\n'));
+    }
+    
   }
 }
 
