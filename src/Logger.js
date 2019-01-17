@@ -53,7 +53,7 @@ class Logger {
     winston.log('verbose', ...messages);
   }
 
-  //TODO: Be able to set and deactivate file logging via a server command.
+  // it would be nice to Be able to set and deactivate file logging via a server command.
   static setFileLogging(path) {
     if (!path.endsWith(logExt)) {
       path += logExt;

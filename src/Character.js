@@ -232,7 +232,7 @@ class Character extends Metadatable(EventEmitter) {
     // adds this to the target's combatants list as well
     this.combatants.add(target);
     if (!target.isInCombat()) {
-      // TODO: This hardcoded 2.5 second lag on the target needs to be refactored
+      // This hardcoded 2.5 second lag on the target needs to be refactored
       target.initiateCombat(this, 2500);
     }
 

@@ -3,7 +3,7 @@
 /**
  * Contains registered channels
  *
- * TODO: should probably refactor this to just extend `Map`
+ * should probably refactor this to just extend `Map`
  */
 class ChannelManager {
   constructor() {
