@@ -4,6 +4,7 @@ const Broadcast = require('./Broadcast');
 const WorldAudience = require('./WorldAudience');
 const PrivateAudience = require('./PrivateAudience');
 const PartyAudience = require('./PartyAudience');
+const color = require('mudcolors');
 
 /**
  * @property {ChannelAudience} audience People who receive messages from this channel
@@ -149,7 +150,7 @@ class Channel {
     }
 
     const colors = Array.isArray(this.color) ? this.color : [this.color];
-
+    message = color.parse(message); //parse with mudcolors
     const open = colors.map(color => `<${color}>`).join('');
     const close = colors.reverse().map(color => `</${color}>`).join('');
 
