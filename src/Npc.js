@@ -28,9 +28,8 @@ class Npc extends Scriptable(Character) {
     this.area = data.area;
     this.script = data.script;
     this.behaviors = new Map(Object.entries(data.behaviors || {}));
-    // FIXME: What is this? Why is it here?
-    this.damage = data.damage;
-    this.defaultEquipment = data.equipment || [];
+    this.equipment = new Map();
+    this.defaultEquipment = data.equipment || {};
     this.defaultItems = data.items || [];
     this.description = data.description;
     this.entityReference = data.entityReference; 
@@ -44,9 +43,17 @@ class Npc extends Scriptable(Character) {
    * Move the npc to the given room, emitting events appropriately
    * @param {Room} nextRoom
    * @param {function} onMoved Function to run after the npc is moved to the next room but before enter events are fired
+   * @fires Room#npcLeave
+   * @fires Room#npcEnter
+   * @fires Npc#enterRoom
    */
   moveTo(nextRoom, onMoved = _ => _) {
     if (this.room) {
+      /**
+       * @event Room#npcLeave
+       * @param {Npc} npc
+       * @param {Room} nextRoom
+       */
       this.room.emit('npcLeave', this, nextRoom);
       this.room.removeNpc(this);
     }
@@ -56,20 +63,16 @@ class Npc extends Scriptable(Character) {
 
     onMoved();
 
+    /**
+     * @event Room#npcEnter
+     * @param {Npc} npc
+     */
     nextRoom.emit('npcEnter', this);
+    /**
+     * @event Npc#enterRoom
+     * @param {Room} room
+     */
     this.emit('enterRoom', nextRoom);
-  }
-
-  /**
-   * FIXME: Why does the core have a damage stat for Npc, what the heck is it doing in here?
-   */
-  serialize() {
-    return Object.assign(super.serialize(), { damage: this.damage });
-  }
-
-  getDamage() {
-    const range = this.damage.split('-');
-    return { min: range[0], max: range[1] };
   }
 
   hydrate(state) {
@@ -78,17 +81,21 @@ class Npc extends Scriptable(Character) {
 
     this.setupBehaviors(state.MobBehaviorManager);
 
-    this.defaultItems.forEach(defaultItemId => {
-      if (parseInt(defaultItemId, 10)) {
-        defaultItemId = this.area.name + ':' + defaultItemId;
-      }
-
+    for (let defaultItemId of this.defaultItems) {
       Logger.verbose(`\tDIST: Adding item [${defaultItemId}] to npc [${this.name}]`);
       const newItem = state.ItemFactory.create(this.area, defaultItemId);
       newItem.hydrate(state);
       state.ItemManager.add(newItem);
       this.addItem(newItem);
-    });
+    }
+
+    for (let [slot, defaultEqId] of Object.entries(this.defaultEquipment)) {
+      Logger.verbose(`\tDIST: Equipping item [${defaultEqId}] to npc [${this.name}] in slot [${slot}]`);
+      const newItem = state.ItemFactory.create(this.area, defaultEqId);
+      newItem.hydrate(state);
+      state.ItemManager.add(newItem);
+      this.equip(newItem, slot);
+    }
   }
 
   get isNpc() {

@@ -61,8 +61,7 @@ class Player extends Character {
    * @param {...*}   args
    */
   emit(event, ...args) {
-    if (this.__pruned) {
-      // pruned by PlayerManager, squelch events
+    if (this.__pruned || !this.__hydrated) {
       return;
     }
 
@@ -130,9 +129,17 @@ class Player extends Character {
    * Move the player to the given room, emitting events appropriately
    * @param {Room} nextRoom
    * @param {function} onMoved Function to run after the player is moved to the next room but before enter events are fired
+   * @fires Room#playerLeave
+   * @fires Room#playerEnter
+   * @fires Player#enterRoom
    */
   moveTo(nextRoom, onMoved = _ => _) {
     if (this.room && this.room !== nextRoom) {
+      /**
+       * @event Room#playerLeave
+       * @param {Player} player
+       * @param {Room} nextRoom
+       */
       this.room.emit('playerLeave', this, nextRoom);
       this.room.removePlayer(this);
     }
@@ -142,31 +149,32 @@ class Player extends Character {
 
     onMoved();
 
+    /**
+     * @event Room#playerEnter
+     * @param {Player} player
+     */
     nextRoom.emit('playerEnter', this);
+    /**
+     * @event Player#enterRoom
+     * @param {Room} room
+     */
     this.emit('enterRoom', nextRoom);
   }
 
   save(callback) {
+    if (!this.__hydrated) {
+      return;
+    }
+
     this.emit('save', callback);
   }
 
   hydrate(state) {
+    super.hydrate(state);
+
     // QuestTracker has to be hydrated before the rest otherwise events fired by the subsequent
     // hydration will be emitted onto unhydrated quest objects and error
     this.questTracker.hydrate(state);
-
-    super.hydrate(state);
-
-    if (typeof this.room === 'string') {
-      let room = state.RoomManager.getRoom(this.room);
-      if (!room) {
-        Logger.error(`ERROR: Player ${this.name} was saved to invalid room ${this.room}.`);
-        room = state.AreaManager.getPlaceholderArea().getRoomById('placeholder');
-      }
-
-      this.room = room;
-      this.moveTo(room);
-    }
 
     if (typeof this.account === 'string') {
       this.account = state.AccountManager.getAccount(this.account);
@@ -191,7 +199,6 @@ class Player extends Character {
           newItem.initializeInventory(itemDef.inventory);
           newItem.hydrate(state, itemDef);
           state.ItemManager.add(newItem);
-          newItem.isEquipped = true;
           this.equip(newItem, slot);
         } catch (e) {
           Logger.error(e.message);
@@ -201,6 +208,16 @@ class Player extends Character {
       this.equipment = new Map();
     }
 
+    if (typeof this.room === 'string') {
+      let room = state.RoomManager.getRoom(this.room);
+      if (!room) {
+        Logger.error(`ERROR: Player ${this.name} was saved to invalid room ${this.room}.`);
+        room = state.AreaManager.getPlaceholderArea().getRoomById('placeholder');
+      }
+
+      this.room = room;
+      this.moveTo(room);
+    }
   }
 
   serialize() {
