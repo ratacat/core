@@ -206,7 +206,11 @@ class Item extends GameEntity {
     }
 
     this.setupBehaviors(state.ItemBehaviorManager);
-
+    
+    this.description = serialized.description || this.description;
+    this.keywords    = serialized.keywords || this.keywords;
+    this.name        = serialized.name || this.name;
+    this.roomDesc    = serialized.roomDesc || this.roomDesc;
     this.metadata = JSON.parse(JSON.stringify(serialized.metadata || this.metadata));
     this.closed = 'closed' in serialized ? serialized.closed : this.closed;
     this.locked = 'locked' in serialized ? serialized.locked : this.locked;
