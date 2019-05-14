@@ -195,7 +195,7 @@ class Room extends GameEntity {
       return false;
     }
 
-    const roomExit = exits.find(ex => ex.direction.indexOf(exitName) === 0);
+    const roomExit = exits.find(ex => ex.direction == exitName);
 
     return roomExit || false;
   }
