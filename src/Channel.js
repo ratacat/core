@@ -76,15 +76,15 @@ class Channel {
       if (!targets.length) {
         throw new NoRecipientError();
       }
-      Broadcast.sayAt(sender, this.formatter.sender(sender, targets[0], message, this.colorify.bind(this)));
+      Broadcast.sayAt(sender, this.formatter.sender(sender, targets[0], message, this.colorify.bind(this)), 80);
     } else {
-      Broadcast.sayAt(sender, this.formatter.sender(sender, null, message, this.colorify.bind(this)));
+      Broadcast.sayAt(sender, this.formatter.sender(sender, null, message, this.colorify.bind(this)), 80);
     }
 
     // send to audience targets
     Broadcast.sayAtFormatted(this.audience, message, (target, message) => {
       return this.formatter.target(sender, target, message, this.colorify.bind(this));
-    });
+    }, 80);
 
     // strip color tags
     const rawMessage = message.replace(/\<\/?\w+?\>/gm, '');
@@ -149,12 +149,12 @@ class Channel {
       return message;
     }
 
-    const colors = Array.isArray(this.color) ? this.color : [this.color];
+    //const colors = Array.isArray(this.color) ? this.color : [this.color];
     message = color.parse(message); //parse with mudcolors
-    const open = colors.map(color => `<${color}>`).join('');
-    const close = colors.reverse().map(color => `</${color}>`).join('');
+    //const open = colors.map(color => `<${color}>`).join('');
+    //const close = colors.reverse().map(color => `</${color}>`).join('');
 
-    return open + message + close;
+    return message;
   }
 }
 
