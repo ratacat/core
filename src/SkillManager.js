@@ -40,8 +40,10 @@ class SkillManager {
    */
   find(search, includePassive = false) {
     for (const [ id, skill ] of this.skills) {
-      if (!includePassive && skill.flags.includes(SkillFlag.PASSIVE)) {
-        continue;
+      if (skill.flags.length > 0) {
+        if (!includePassive && skill.flags.includes(SkillFlag.PASSIVE)) {
+          continue;
+        }
       }
 
       if (id.indexOf(search) === 0) {
