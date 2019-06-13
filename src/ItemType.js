@@ -12,5 +12,6 @@ module.exports = {
   POTION: 5,
   RESOURCE: 6,
   MATERIAL: 7,
-  FOOD: 8
+  FOOD: 8,
+  GEM: 9
 };

@@ -76,7 +76,8 @@ class Room extends GameEntity {
       'playerEnter',
       'playerLeave',
       'npcEnter',
-      'npcLeave'
+      'npcLeave',
+      'newPlayer'
     ];
 
     if (proxiedEvents.includes(eventName)) {

@@ -1,6 +1,7 @@
 'use strict';
 
 const sty = require('sty');
+const mudcolors = require('mudcolors');
 
 /**
  * Helper methods for colored output during input-events
@@ -12,7 +13,7 @@ class EventUtil {
    * @return {function (string)}
    */
   static genWrite(socket) {
-    return string => socket.write(sty.parse(string));
+    return string => socket.write(mudcolors.parse(sty.parse(string)));
   }
 
   /**
@@ -24,7 +25,7 @@ class EventUtil {
     if (noparse) {
       return string => socket.write(string + '\r\n');
     } else {
-      return string => socket.write(sty.parse(string + '\r\n'));
+      return string => socket.write(mudcolors.parse(sty.parse(string + '\r\n')));
     }
     
   }
