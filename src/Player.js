@@ -37,7 +37,7 @@ class Player extends Character {
     }, data.quests);
 
     this.questTracker = new QuestTracker(this, questData.active, questData.completed);
-    this.commandQueue = new CommandQueue();
+    this.commandQueue = new CommandQueue(this);
     this.role = data.role || PlayerRoles.PLAYER;
 
     // Default max inventory size config

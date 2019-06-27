@@ -7,7 +7,8 @@ var CommandExecutable;
  * Keeps track of the queue off commands to execute for a player
  */
 class CommandQueue {
-  constructor() {
+  constructor(player) {
+    this.belongsTo = player;
     this.commands = [];
     this.lag = 0;
     this.lastRun = 0;
@@ -19,8 +20,9 @@ class CommandQueue {
    * directly manipulate the `lag` property.
    * @param {number} amount milliseconds of lag
    */
-  addLag(amount) {
+  addLag(amount,timestamp) {
     this.lag += Math.max(0, amount);
+    this.belongsTo.emit('lagAdded',amount,timestamp);
   }
 
   /**
