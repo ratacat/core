@@ -337,7 +337,7 @@ class Room extends GameEntity {
     /**
      * @event Npc#spawn
      */
-    newNpc.emit('spawn');
+    newNpc.emit('spawn',newNpc);
     return newNpc;
   }
 
