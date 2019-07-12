@@ -16,6 +16,7 @@
   },
   "main": "index.js",
   "dependencies": {
+    "handlebars": "4.1.2",
     "bcryptjs": "^2.4.0",
     "js-yaml": "^3.12.0",
     "humanize-duration": "",
@@ -27,6 +28,9 @@
     "uuid": "^3.3.2",
     "winston": "^2.4.4",
     "wrap-ansi": "^2.1.0"
+  },
+  "resolutions": {
+    "handlebars": "4.1.2"
   },
   "devDependencies": {
     "coveralls": "^3.0.2",

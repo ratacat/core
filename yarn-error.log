@@ -1,0 +1,70 @@
+Arguments: 
+  /usr/local/Cellar/node/11.1.0/bin/node /usr/local/bin/yarn
+
+PATH: 
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/usr/local/MacGPG2/bin
+
+Yarn version: 
+  1.12.3
+
+Node version: 
+  11.1.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  SyntaxError: /Users/jared/Dev/core/package.json: Unexpected token } in JSON at position 911
+      at JSON.parse (<anonymous>)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:1631:59
+      at Generator.next (<anonymous>)
+      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:304:30)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:315:13
+
+npm manifest: 
+  {
+    "name": "ranvier",
+    "description": "MUD game engine",
+    "homepage": "https://ranviermud.com",
+    "bugs": "https://github.com/ranviermud/core/issues",
+    "license": "MIT",
+    "author": "Shawn Biddle (http://shawnbiddle.com)",
+    "version": "3.0.6",
+    "repository": "github:ranviermud/core",
+    "engines": {
+      "node": ">= 10.12.0"
+    },
+    "scripts": {
+      "test": "nyc --reporter=html --reporter=text --include=src --all mocha --recursive",
+      "coverage": "nyc report --reporter=text-lcov | coveralls"
+    },
+    "main": "index.js",
+    "dependencies": {
+      "handlebars": "4.1.2",
+      "bcryptjs": "^2.4.0",
+      "js-yaml": "^3.12.0",
+      "humanize-duration": "",
+      "longjohn": "^0.2.11",
+      "mudcolors": "^1.0.5",
+      "pretty-error": "^2.0.2",
+      "require-dir": "^1.1.0",
+      "sty": "",
+      "uuid": "^3.3.2",
+      "winston": "^2.4.4",
+      "wrap-ansi": "^2.1.0"
+    },
+    "resolutions": {
+      "handlebars": "4.1.2",
+    },
+    "devDependencies": {
+      "coveralls": "^3.0.2",
+      "mocha": "^5.2.0",
+      "nyc": "^13.1.0"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
