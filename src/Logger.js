@@ -1,6 +1,7 @@
 'use strict';
 
 const winston = require('winston');
+const mudcolors = require('mudcolors');
 
 // Reset Console transport and configure it to include ISO timestamp.
 winston.remove(winston.transports.Console);
@@ -27,6 +28,7 @@ class Logger {
     Medium priority logging, default.
   */
   static log(...messages) {
+    messages = messages.map((m)=> mudcolors.parse(m));
     winston.log('info', ...messages);
   }
 
@@ -35,6 +37,7 @@ class Logger {
     Highest priority logging.
   */
   static error(...messages) {
+    messages = messages.map((m)=> mudcolors.parse(m));
     winston.log('error', ...messages);
   }
 
@@ -42,6 +45,7 @@ class Logger {
     Less high priority than error, still higher visibility than default.
   */
   static warn(...messages) {
+    messages = messages.map((m)=> mudcolors.parse(m));
     winston.log('warn', ...messages);
   }
 
@@ -50,6 +54,7 @@ class Logger {
     Only logs if the environment variable is set to VERBOSE.
   */
   static verbose(...messages) {
+    messages = messages.map((m)=> mudcolors.parse(m));
     winston.log('verbose', ...messages);
   }
 

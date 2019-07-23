@@ -86,19 +86,21 @@ class Npc extends Scriptable(Character) {
     this.setupBehaviors(state.MobBehaviorManager);
 
     for (let defaultItemId of this.defaultItems) {
-      Logger.verbose(`\tDIST: Adding item [${defaultItemId}] to npc [${this.name}]`);
+      
       const newItem = state.ItemFactory.create(this.area, defaultItemId);
       newItem.hydrate(state);
       state.ItemManager.add(newItem);
       this.addItem(newItem);
+      Logger.verbose(`\tDIST: Adding item [${newItem.name}w]] to npc [${this.name}w]]`);
     }
 
     for (let [slot, defaultEqId] of Object.entries(this.defaultEquipment)) {
-      Logger.verbose(`\tDIST: Equipping item [${defaultEqId}] to npc [${this.name}] in slot [${slot}]`);
+      
       const newItem = state.ItemFactory.create(this.area, defaultEqId);
       newItem.hydrate(state);
       state.ItemManager.add(newItem);
       this.equip(newItem, slot);
+      Logger.verbose(`\tDIST: Equipping item [${newItem.name}w]] to npc [${this.name}w]] in slot [${slot}w]]`);
     }
   }
 

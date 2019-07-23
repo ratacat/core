@@ -327,7 +327,7 @@ class Room extends GameEntity {
    * @return {Npc}
    */
   spawnNpc(state, entityRef) {
-    Logger.verbose(`\tSPAWN: Adding npc [${entityRef}] to room [${this.title}]`);
+    //Logger.verbose(`\tSPAWN: Adding npc [${entityRef}] to room [${this.title}]`);
     const newNpc = state.MobFactory.create(this.area, entityRef);
     newNpc.hydrate(state);
     newNpc.sourceRoom = this;
