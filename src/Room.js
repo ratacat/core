@@ -2,6 +2,7 @@
 
 const GameEntity = require('./GameEntity');
 const Logger = require('./Logger');
+const { Inventory, InventoryFullError } = require('./Inventory');
 
 /**
  * @property {Area}          area         Area room is in
@@ -51,7 +52,7 @@ class Room extends GameEntity {
     this.doors = new Map(Object.entries(JSON.parse(JSON.stringify(def.doors || {}))));
     this.defaultDoors = def.doors;
 
-    this.items = new Set();
+    this.items = new Inventory({max:16});
     this.npcs = new Set();
     this.players = new Set();
 
@@ -81,7 +82,7 @@ class Room extends GameEntity {
     ];
 
     if (proxiedEvents.includes(eventName)) {
-      const entities = [...this.npcs, ...this.players, ...this.items];
+      const entities = [...this.npcs, ...this.players, ...this.items.values()];
       for (const entity of entities) {
         entity.emit(eventName, ...args);
       }
@@ -127,7 +128,7 @@ class Room extends GameEntity {
    * @param {Item} item
    */
   addItem(item) {
-    this.items.add(item);
+    this.items.addItem(item);
     item.room = this;
   }
 
@@ -135,7 +136,7 @@ class Room extends GameEntity {
    * @param {Item} item
    */
   removeItem(item) {
-    this.items.delete(item);
+    this.items.removeItem(item);
     item.room = null;
   }
 
@@ -351,7 +352,7 @@ class Room extends GameEntity {
      */
     this.emit('spawn');
 
-    this.items = new Set();
+    //this.items = new Set();
 
     // NOTE: This method effectively defines the fact that items/npcs do not
     // persist through reboot unless they're stored on a player.
