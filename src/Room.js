@@ -23,7 +23,7 @@ const { Inventory, InventoryFullError } = require('./Inventory');
  */
 class Room extends GameEntity {
   constructor(area, def) {
-    super();
+    super(def);
     const required = ['title', 'description', 'id'];
     for (const prop of required) {
       if (!(prop in def)) {
@@ -343,6 +343,8 @@ class Room extends GameEntity {
   }
 
   hydrate(state) {
+    super.hydrate(state);
+
     this.setupBehaviors(state.RoomBehaviorManager);
 
     /**
