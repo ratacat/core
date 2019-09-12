@@ -101,6 +101,7 @@ class Channel {
        */
       target.emit('channelReceive', this, sender, rawMessage);
     }
+    sender.emit('channelSend',this, rawMessage);
   }
 
   describeSelf(sender) {

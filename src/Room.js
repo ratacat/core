@@ -52,7 +52,7 @@ class Room extends GameEntity {
     this.doors = new Map(Object.entries(JSON.parse(JSON.stringify(def.doors || {}))));
     this.defaultDoors = def.doors;
 
-    this.items = new Inventory({max:16});
+    this.items = new Inventory({max:32});
     this.npcs = new Set();
     this.players = new Set();
 

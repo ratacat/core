@@ -5,6 +5,7 @@ const SkillType = require('./SkillType');
 const SkillErrors = require('./SkillErrors');
 const Damage = require('./Damage');
 const Broadcast = require('./Broadcast');
+const Room = require('./Room');
 
 /**
  * @property {function (Effect)} configureEffect modify the skill's effect before adding to player
@@ -87,7 +88,16 @@ class Skill {
       }
     }
 
-    if (target !== player && this.initiatesCombat) {
+    if (target instanceof Room ) {
+      target.npcs.forEach((npc) => {
+        if (npc.getBehavior('combat') == true) {
+          player.initiateCombat(npc)
+        }
+      });
+    } else if (target !== player && target.getBehavior('combat') !== true){
+      player.emit('attackedNonCombatant');
+      return false;
+    } else if (target !== player && this.initiatesCombat) {
       player.initiateCombat(target);
     }
 

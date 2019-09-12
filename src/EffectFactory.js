@@ -69,6 +69,7 @@ class EffectFactory {
     const effect = new Effect(id, def);
     entry.eventManager.attach(effect);
 
+    
     return effect;
   }
 }

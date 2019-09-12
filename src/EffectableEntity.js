@@ -222,7 +222,8 @@ class EffectableEntity extends EventEmitter
    */
   evaluateIncomingDamage(damage, currentAmount) {
     let amount = this.effects.evaluateIncomingDamage(damage, currentAmount);
-    return Math.floor(amount);
+    //jared removed Math.floor to allow for lower level regeneration/damage
+    return amount;
   }
 
   /**

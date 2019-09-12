@@ -172,7 +172,7 @@ class Broadcast {
     const widthPercent = Math.round((percent / 100) * width);
     buf += Broadcast.line(widthPercent, barChar) + (percent === 100 ? '' : rightDelim);
     buf += Broadcast.line(width - widthPercent, fillChar);
-    buf += "</bold>" + rightDelim + closeColor;
+    buf += "</bold>" + closeColor;
     return buf;
   }
 

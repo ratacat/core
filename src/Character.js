@@ -151,7 +151,6 @@ class Character extends Metadatable(EffectableEntity) {
   }
 
   /**
-<<<<<<< HEAD
    * @see EffectList.evaluateIncomingDamage
    * @param {Damage} damage
    * @return {number}
@@ -173,8 +172,6 @@ class Character extends Metadatable(EffectableEntity) {
   }
 
   /**
-=======
->>>>>>> e19cebd27cd8ca897f22e2db17f547ec18eabefd
    * @param {Item} item
    * @param {string} slot Slot to equip the item in
    *
