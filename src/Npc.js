@@ -91,7 +91,7 @@ class Npc extends Scriptable(Character) {
       newItem.hydrate(state);
       state.ItemManager.add(newItem);
       this.addItem(newItem);
-      Logger.verbose(`\tDIST: Adding item [${newItem.name}w]] to npc [${this.name}w]]`);
+      //Logger.verbose(`\tDIST: Adding item [${newItem.name}w]] to npc [${this.name}w]]`);
     }
 
     for (let [slot, defaultEqId] of Object.entries(this.defaultEquipment)) {
@@ -100,7 +100,7 @@ class Npc extends Scriptable(Character) {
       newItem.hydrate(state);
       state.ItemManager.add(newItem);
       this.equip(newItem, slot);
-      Logger.verbose(`\tDIST: Equipping item [${newItem.name}w]] to npc [${this.name}w]] in slot [${slot}w]]`);
+      //Logger.verbose(`\tDIST: Equipping item [${newItem.name}w]] to npc [${this.name}w]] in slot [${slot}w]]`);
     }
   }
 
