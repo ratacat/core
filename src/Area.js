@@ -3,7 +3,7 @@
 const GameEntity = require('./GameEntity');
 const AreaFloor = require('./AreaFloor');
 
-/**
+/** 
  * Representation of an in game area
  * See the {@link http://ranviermud.com/extending/areas/|Area guide} for documentation on how to
  * actually build areas.
