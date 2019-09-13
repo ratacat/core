@@ -376,7 +376,7 @@ class Room extends GameEntity {
       try {
         this.spawnNpc(state, defaultNpc.id);
       } catch (err) {
-        Logger.error(err);
+        Logger.error(err.stack);
       }
     });
   }
