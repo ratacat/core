@@ -239,7 +239,7 @@ class Player extends Character {
       data.equipment = null;
     }
 
-    return data;
+     return data;
   }
 }
 

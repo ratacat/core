@@ -4,6 +4,8 @@ const EventEmitter = require('events');
 const Data = require('./Data');
 const Player = require('./Player');
 const EventManager = require('./EventManager');
+const Logger = require('./Logger');
+const util = require('util');
 
 /**
  * Keeps track of all active players in game
@@ -144,8 +146,13 @@ class PlayerManager extends EventEmitter {
     if (!this.loader) {
       throw new Error('No entity loader configured for players');
     }
-
-    await this.loader.update(player.name, player.serialize());
+    try {
+      await this.loader.update(player.name, player.serialize());
+    } catch (err) {
+      Logger.error(`${player.name} failed to serialize.`);
+      Logger.error(`err.stack`);
+      Logger.error(util.inspect(player.metadata));
+    }
 
     /**
      * @event Player#saved

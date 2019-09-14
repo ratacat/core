@@ -1,5 +1,5 @@
 'use strict';
-
+const Logger = require('./Logger')
 /**
  * Self-managing list of effects for a target
  * @property {Set}    effects
@@ -254,8 +254,12 @@ class EffectList {
       if (!effect.config.persists) {
         continue;
       }
-
-      serialized.push(effect.serialize());
+      try {
+        serialized.push(effect.serialize());
+      }  catch (err) {
+        Logger.log(`An effect failed to serialize: ${effect.id} on ${effect.target.name}`);
+        Logger.log(err.stack);
+      }
     }
 
     return serialized;
