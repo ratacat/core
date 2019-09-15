@@ -37,7 +37,7 @@ class Logger {
     Highest priority logging.
   */
   static error(...messages) {
-    messages = messages.map((m)=> mudcolors.parse(m));
+    messages = messages.map((m)=> m);
     winston.log('error', ...messages);
   }
 
