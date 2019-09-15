@@ -150,7 +150,7 @@ class PlayerManager extends EventEmitter {
       await this.loader.update(player.name, player.serialize());
     } catch (err) {
       Logger.error(`${player.name} failed to serialize.`);
-      Logger.error(`err.stack`);
+      Logger.error(err.stack);
       Logger.error(util.inspect(player.metadata));
     }
 
