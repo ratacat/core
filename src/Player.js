@@ -218,7 +218,12 @@ class Player extends Character {
   }
 
   serialize() {
-    let data = Object.assign(super.serialize(), {
+    let ss;
+    try {ss =super.serialize();} catch (err){
+      Logger.error(`super.serialize() failed in Player.serialize`);
+    }
+    
+    let data = Object.assign(ss, {
       account: this.account.name,
       experience: this.experience,
       inventory: this.inventory && this.inventory.serialize(),

@@ -255,7 +255,8 @@ class EffectList {
         continue;
       }
       try {
-        serialized.push(effect.serialize());
+        let ss = effect.serialize();
+        serialized.push(ss);
       }  catch (err) {
         Logger.log(`An effect failed to serialize: ${effect.id} on ${effect.target.name}`);
         Logger.log(err.stack);
