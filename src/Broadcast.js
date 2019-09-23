@@ -1,13 +1,17 @@
 'use strict';
 
 const ansi = require('sty');
+const { Logger } = require('./Logger');
+const lineWrap = require('wrap-ansi');
+const mudcolors = require('mudcolors');
+const _ = require('lodash');
 ansi.enable(); // force ansi on even when there isn't a tty for the server
-const wrap = require('wrap-ansi');
+
 
 /** @typedef {{getBroadcastTargets: function(): Array}} */
 var Broadcastable;
 
-/**
+/** THIS IS THE CORE BROADCAST, IT"S ONLY USED FOR CHANNELS!!!!!!
  * Class used for sending text to the player. All output to the player should happen through this
  * class.
  */
@@ -35,15 +39,48 @@ class Broadcast {
         continue;
       }
 
-      if (target.socket._prompted) {
-        target.socket.write('\r\n');
-        target.socket._prompted = false;
+      let lastLine = _.get(target,`metadata.broadcastLog`)[0];
+      if (isLineChat(message) && ! isLineChat(lastLine)){
+        target.socket._prompt = true;
+      }
+
+      if (target.socket._prompt) {
+        if (!(isLineChat(message) && isLineChat(lastLine)) ){
+          this.record(target,'\r\n');
+          target.socket.write('\r\n');
+          target.socket._prompt = false;
+        }
       }
 
       let targetMessage = formatter(target, message);
-      targetMessage = wrapWidth ? Broadcast.wrap(targetMessage, wrapWidth) : ansi.parse(targetMessage);
+      targetMessage = wrapWidth ? Broadcast.wrap(targetMessage, wrapWidth) : mudcolors.parse(ansi.parse(targetMessage));
       target.socket.write(targetMessage);
+      this.record(target,targetMessage);
     }
+    function isLineChat(line){
+      return line.includes('You chat: [0m[92m') || line.includes(`[0m[96m[[0m[97mchat[0m[96m][0m[37m`)
+    }
+  }
+
+  /**
+   * records latest broadcasts to character metadata
+   * @param {Character} target 
+   * @param {String} targetMessage 
+   */
+  static record(target,targetMessage){
+    if (!_.get(target,'metadata')){
+      target.metadata = new Object();
+    }
+
+    if (!_.get(target,'metadata.broadcastLog')){
+      target.metadata.broadcastLog = new Array();
+    }
+
+    if (_.get(target,'metadata.broadcastLog').length > 1000) {
+      let discard = target.metadata.broadcastLog.pop();
+    }
+
+    target.metadata.broadcastLog.unshift(targetMessage);
   }
 
   /**
@@ -65,7 +102,7 @@ class Broadcast {
     excludes = [].concat(excludes);
 
     const targets = source.getBroadcastTargets()
-      .filter(target => !excludes.includes(target));
+      .filter(target => !excludes.includes(target) && target.metadata.position > 0);
 
     const newSource = {
       getBroadcastTargets: () => targets
@@ -122,28 +159,50 @@ class Broadcast {
    * @param {number} wrapWidth
    * @param {boolean} useColor
    */
-  static prompt(player, extra, wrapWidth, useColor) {
-    player.socket._prompted = false;
-    Broadcast.at(player, '\r\n' + player.interpolatePrompt(player.prompt, extra) + ' ', wrapWidth, useColor);
-    let needsNewline = player.extraPrompts.size > 0;
-    if (needsNewline) {
-      Broadcast.sayAt(player);
-    }
 
-    for (const [id, extraPrompt] of player.extraPrompts) {
-      Broadcast.sayAt(player, extraPrompt.renderer(), wrapWidth, useColor);
-      if (extraPrompt.removeOnRender) {
-        player.removePrompt(id);
+  static promptAll(source) {
+    for (const target of source.getBroadcastTargets()) {
+      if (!target.socket || !target.socket.writable) {
+        continue;
       }
+
+      this.prompt(target);
     }
 
-    if (needsNewline) {
-      Broadcast.at(player, '> ');
-    }
+  }
 
-    player.socket._prompted = true;
-    if (player.socket.writable) {
-      player.socket.command('goAhead');
+  static prompt(player, extra, wrapWidth, useColor) {
+    const usingWebsockets = player.socket instanceof player.metadata.transport;
+    if (!usingWebsockets){
+      if (!player.socket){
+        Logger.error(`${player.name} has no socket`);
+        return false;
+      }
+      player.socket._prompt = false;
+      Broadcast.at(player, '\r\n' + player.interpolatePrompt(player.prompt, extra) + ' ', wrapWidth, useColor);
+      let needsNewline = player.extraPrompts.size > 0;
+      if (needsNewline) {
+        Broadcast.sayAt(player);
+      }
+      
+      for (const [id, extraPrompt] of player.extraPrompts) {
+        Broadcast.sayAt(player, extraPrompt.renderer(), wrapWidth, useColor);
+        if (extraPrompt.removeOnRender) {
+          player.removePrompt(id);
+        }
+      }
+      
+      if (needsNewline) {
+        Broadcast.at(player, '> ');
+      }
+      
+      
+      player.socket._prompt = true;
+      if (player.socket.writable) {
+        player.socket.command('goAhead');
+      }
+    } else {
+      Broadcast.at(player,'\r\n');
     }
   }
 
@@ -170,9 +229,9 @@ class Broadcast {
     const closeColor = `</${color}>`;
     let buf = openColor + leftDelim + "<bold>";
     const widthPercent = Math.round((percent / 100) * width);
-    buf += Broadcast.line(widthPercent, barChar) + (percent === 100 ? '' : rightDelim);
+    buf += Broadcast.line(widthPercent, barChar);
     buf += Broadcast.line(width - widthPercent, fillChar);
-    buf += "</bold>" + closeColor;
+    buf += "</bold>" + rightDelim + closeColor;
     return buf;
   }
 
@@ -189,8 +248,8 @@ class Broadcast {
     let openColor = '';
     let closeColor = '';
     if (color) {
-      openColor = `<${color}>`;
-      closeColor = `</${color}>`;
+      openColor = `${color}`;
+      closeColor = ``;
     }
 
     return (
@@ -213,8 +272,8 @@ class Broadcast {
     let openColor = '';
     let closeColor = '';
     if (color) {
-      openColor = `<${color}>`;
-      closeColor = `</${color}>`;
+      openColor = `${color}`;
+      closeColor = `w]`;
     }
     return openColor + (new Array(width + 1)).join(fillChar) + closeColor;
   }
@@ -226,7 +285,7 @@ class Broadcast {
    * @return {string}
    */
   static wrap(message, width = 80) {
-    return Broadcast._fixNewlines(wrap(ansi.parse(message), width));
+    return Broadcast._fixNewlines(lineWrap(mudcolors.parse(ansi.parse(message)), width));
   }
 
   /**

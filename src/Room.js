@@ -308,7 +308,7 @@ class Room extends GameEntity {
    * @return {Item} The newly created item
    */
   spawnItem(state, entityRef) {
-    Logger.verbose(`\tSPAWN: Adding item [${entityRef}] to room [${this.title}]`);
+    Logger.verbose(`\tSPAWN: Adding item |${entityRef}| to room |${this.title}|`);
     const newItem = state.ItemFactory.create(this.area, entityRef);
     newItem.hydrate(state);
     newItem.sourceRoom = this;
