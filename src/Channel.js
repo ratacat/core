@@ -85,7 +85,7 @@ class Channel {
     Broadcast.sayAtFormatted(this.audience, message, (target, message) => {
       return this.formatter.target(sender, target, message, this.colorify.bind(this));
     }, 80);
-    Broadcast.prompt(this.audience);
+    Broadcast.promptAll(this.audience);
 
     // strip color tags
     const rawMessage = message.replace(/\<\/?\w+?\>/gm, '');
