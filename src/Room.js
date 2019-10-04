@@ -46,6 +46,7 @@ class Room extends GameEntity {
     this.description = def.description;
     this.entityReference = this.area.name + ':' + def.id;
     this.exits = def.exits || [];
+    this.walls = def.walls || [];
     this.id = def.id;
     this.title = def.title;
     // create by-val copies of the doors config so the lock/unlock don't accidentally modify the original definition
@@ -177,7 +178,7 @@ class Room extends GameEntity {
         this.coordinates.z + z
       );
 
-      if (room && !exits.find(ex => ex.direction === adj.dir)) {
+      if (room && !exits.find(ex => ex.direction === adj.dir) && !this.walls.includes(adj.dir)) {
         exits.push({ roomId: room.entityReference, direction: adj.dir, inferred: true });
       }
     }

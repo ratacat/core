@@ -39,20 +39,26 @@ class Broadcast {
         continue;
       }
 
-      let lastLine = _.get(target,`metadata.broadcastLog`)[0];
-      if (isLineChat(message) && ! isLineChat(lastLine)){
+      let targetMessage = formatter(target, message);
+      let lastLine;
+      if (_.get(target,`metadata.broadcastLog`)[0].replace(/[\[0m\n\r]/g,'').length < 3) {
+        lastLine = _.get(target,`metadata.broadcastLog`)[1];
+      } else {
+        lastLine = _.get(target,`metadata.broadcastLog`)[0];
+      }
+
+      if (isLineChat(targetMessage) && !isLineChat(lastLine)){
         target.socket._prompt = true;
       }
 
       if (target.socket._prompt) {
-        if (!(isLineChat(message) && isLineChat(lastLine)) ){
+        if (!(isLineChat(targetMessage) && isLineChat(lastLine)) ){
           this.record(target,'\r\n');
           target.socket.write('\r\n');
           target.socket._prompt = false;
         }
       }
-
-      let targetMessage = formatter(target, message);
+      
       targetMessage = wrapWidth ? Broadcast.wrap(targetMessage, wrapWidth) : mudcolors.parse(ansi.parse(targetMessage));
       target.socket.write(targetMessage);
       this.record(target,targetMessage);
@@ -202,7 +208,7 @@ class Broadcast {
         player.socket.command('goAhead');
       }
     } else {
-      Broadcast.at(player,'\r\n');
+      player.socket._prompt = true;
     }
   }
 
