@@ -147,7 +147,7 @@ class Room extends GameEntity {
    *
    * @return {Array<{ id: string, direction: string, inferred: boolean, room: Room= }>}
    */
-  getExits() {
+  getExits(ignorewalls = false) {
     const exits = JSON.parse(JSON.stringify(this.exits)).map(exit => {
       exit.inferred = false;
       return exit;
@@ -177,22 +177,31 @@ class Room extends GameEntity {
         this.coordinates.y + y,
         this.coordinates.z + z
       );
-
-      if (room && !exits.find(ex => ex.direction === adj.dir) && !this.walls.includes(adj.dir)) {
-        exits.push({ roomId: room.entityReference, direction: adj.dir, inferred: true });
+    
+      if (ignorewalls){
+        if (room && !exits.find(ex => ex.direction === adj.dir)) {
+          exits.push({ roomId: room.entityReference, direction: adj.dir, inferred: true });
+        }
+      } else {
+        if (room && !exits.find(ex => ex.direction === adj.dir) && !this.walls.includes(adj.dir)) {
+          exits.push({ roomId: room.entityReference, direction: adj.dir, inferred: true });
+        }
       }
+
     }
 
     return exits;
   }
+
+  
 
   /**
    * Get the exit definition of a room's exit by searching the exit name
    * @param {string} exitName exit name search
    * @return {false|Object}
    */
-  findExit(exitName) {
-    const exits = this.getExits();
+  findExit(exitName, ignorewalls = false) {
+    const exits = this.getExits(ignorewalls);
 
     if (!exits.length) {
       return false;
