@@ -3,6 +3,7 @@
 const EventEmitter = require('events');
 const EffectList = require('./EffectList');
 const Attributes = require('./Attributes');
+const Logger = require('./Logger');
 
 /**
  * @ignore
