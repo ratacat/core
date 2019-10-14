@@ -7,6 +7,7 @@ const EventEmitter = require('events');
 const Heal = require('./Heal');
 const Metadatable = require('./Metadatable');
 const { Inventory, InventoryFullError } = require('./Inventory');
+const Room = require('./Room');
 
 
 /**
@@ -151,6 +152,7 @@ class Character extends Metadatable(EffectableEntity) {
   }
 
   /**
+<<<<<<< HEAD
    * @see EffectList.evaluateIncomingDamage
    * @param {Damage} damage
    * @return {number}
@@ -172,6 +174,8 @@ class Character extends Metadatable(EffectableEntity) {
   }
 
   /**
+=======
+>>>>>>> 56614d3215c4912a1553a989c18ed050fbf64a40
    * @param {Item} item
    * @param {string} slot Slot to equip the item in
    *
@@ -388,7 +392,11 @@ class Character extends Metadatable(EffectableEntity) {
     return Object.assign(super.serialize(), {
       level: this.level,
       name: this.name,
+<<<<<<< HEAD
       room: this.room.entityReference,
+=======
+      room: this.room instanceof Room ? this.room.entityReference : this.room,
+>>>>>>> 56614d3215c4912a1553a989c18ed050fbf64a40
     });
   }
 

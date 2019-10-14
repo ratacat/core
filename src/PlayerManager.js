@@ -166,10 +166,13 @@ class PlayerManager extends EventEmitter {
   async saveAll() {
     for (const [ name, player ] of this.players.entries()) {
       await this.save(player);
+<<<<<<< HEAD
       /**
        * @event Player#save
        */
       player.emit('saved');
+=======
+>>>>>>> 56614d3215c4912a1553a989c18ed050fbf64a40
     }
   }
 
@@ -190,7 +193,11 @@ class PlayerManager extends EventEmitter {
    * @return {Array<Character>}
    */
   getBroadcastTargets() {
+<<<<<<< HEAD
     return [...this.players.values()];
+=======
+    return this.getPlayersAsArray();
+>>>>>>> 56614d3215c4912a1553a989c18ed050fbf64a40
   }
 }
 

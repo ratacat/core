@@ -3,6 +3,7 @@
 const EventEmitter = require('events');
 const EffectList = require('./EffectList');
 const Attributes = require('./Attributes');
+<<<<<<< HEAD
 const Logger = require('./Logger');
 
 /**
@@ -10,6 +11,12 @@ const Logger = require('./Logger');
  * @exports MetadatableFn
  * @param {*} parentClass
  * @return {module:MetadatableFn~Metadatable}
+=======
+
+/**
+ * Base class for game entities that can have effects/attributes
+ * @extends EventEmitter
+>>>>>>> 56614d3215c4912a1553a989c18ed050fbf64a40
  */
 class EffectableEntity extends EventEmitter
 {
@@ -108,11 +115,19 @@ class EffectableEntity extends EventEmitter
 
   /**
    * Get the base value for a given attribute
+<<<<<<< HEAD
    * @param {string} attr Attribute name
    * @return {number}
    */
   getBaseAttribute(attr) {
     var attr = this.attributes.get(attr);
+=======
+   * @param {string} attrName Attribute name
+   * @return {number}
+   */
+  getBaseAttribute(attrName) {
+    const attr = this.attributes.get(attrName);
+>>>>>>> 56614d3215c4912a1553a989c18ed050fbf64a40
     return attr && attr.base;
   }
 
@@ -223,8 +238,12 @@ class EffectableEntity extends EventEmitter
    */
   evaluateIncomingDamage(damage, currentAmount) {
     let amount = this.effects.evaluateIncomingDamage(damage, currentAmount);
+<<<<<<< HEAD
     //jared removed Math.floor to allow for lower level regeneration/damage
     return amount;
+=======
+    return Math.floor(amount);
+>>>>>>> 56614d3215c4912a1553a989c18ed050fbf64a40
   }
 
   /**
