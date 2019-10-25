@@ -108,7 +108,7 @@ class Broadcast {
     excludes = [].concat(excludes);
 
     const targets = source.getBroadcastTargets()
-      .filter(target => !excludes.includes(target) && target.metadata.position > 0);
+      .filter(target => !excludes.includes(target) && target.metadata.position > 0 || !target.socket || !target.socket.writable);
 
     const newSource = {
       getBroadcastTargets: () => targets
