@@ -84,8 +84,8 @@ class QuestFactory {
       player.save();
     });
 
-    instance.on('start', () => {
-      player.emit('questStart', instance);
+    instance.on('start', (npc) => {
+      player.emit('questStart', instance,npc);
       instance.emit('progress', instance.getProgress());
     });
 
@@ -93,8 +93,8 @@ class QuestFactory {
       player.emit('questTurnInReady', instance);
     });
 
-    instance.on('complete', () => {
-      player.emit('questComplete', instance);
+    instance.on('complete', (npc) => {
+      player.emit('questComplete', instance, npc);
       player.questTracker.complete(instance.entityReference);
 
       if (!quest.config.rewards) {

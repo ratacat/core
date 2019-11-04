@@ -70,7 +70,7 @@ class QuestTracker {
   /**
    * @param {Quest} quest
    */
-  start(quest) {
+  start(quest,npc) {
     const qid = quest.entityReference;
     if (this.activeQuests.has(qid)) {
       throw new Error('Quest already started');
@@ -78,7 +78,7 @@ class QuestTracker {
 
     quest.started = (new Date()).toJSON();
     this.activeQuests.set(qid, quest);
-    quest.emit('start');
+    quest.emit('start',npc);
   }
 
   /**

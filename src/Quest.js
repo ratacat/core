@@ -19,7 +19,7 @@ class Quest extends EventEmitter {
       description: 'Missing Quest Description',
       completionMessage: null,
       requires: [],
-      level: 1,
+	  level: 1,
       autoComplete: false,
       repeatable: false,
       rewards: [],
@@ -124,11 +124,11 @@ class Quest extends EventEmitter {
   /**
    * @fires Quest#complete
    */
-  complete() {
+  complete(npc) {
     /**
      * @event Quest#complete
      */
-    this.emit('complete');
+    this.emit('complete',npc);
     for (const goal of this.goals) {
       goal.complete();
     }
