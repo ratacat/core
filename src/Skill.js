@@ -6,6 +6,7 @@ const SkillErrors = require('./SkillErrors');
 const Damage = require('./Damage');
 const Broadcast = require('./Broadcast');
 const Room = require('./Room');
+const Item = require('./Item');
 
 /**
  * @property {function (Effect)} configureEffect modify the skill's effect before adding to player
@@ -94,7 +95,7 @@ class Skill {
           player.initiateCombat(npc)
         }
       });
-    } else if (target !== player && target.getBehavior('combat') !== true){
+    } else if (target !== player && target.getBehavior('combat') !== true && !(target instanceof Item)){
       player.emit('attackedNonCombatant');
       return false;
     } else if (target !== player && this.initiatesCombat) {
