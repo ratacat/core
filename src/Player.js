@@ -134,7 +134,7 @@ class Player extends Character {
    */
   moveTo(nextRoom, onMoved = _ => _, roomExit) {
     const prevRoom = this.room;
-    if (this.room && this.room !== nextRoom) {
+    if (this.room && (this.room instanceof Room) && this.room !== nextRoom) {
       /**
        * @event Room#playerLeave
        * @param {Player} player
