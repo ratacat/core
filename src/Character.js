@@ -76,7 +76,7 @@ class Character extends Metadatable(EffectableEntity) {
     
     if (!target.isInCombat()) {
       // This hardcoded 2.5 second lag on the target needs to be refactored
-      target.initiateCombat(this, 2500);
+      target.initiateCombat(this, 400);
     }
 
     target.addCombatant(this);
