@@ -286,11 +286,11 @@ class BundleManager {
     Logger.verbose(`\t\tLOAD: Quests...`);
     definition.quests = await this.loadQuests(bundle, areaName);
     Logger.verbose(`\t\tLOAD: Items...`);
-    definition.items  = await this.loadEntities(bundle, areaName, 'items', this.state.ItemFactory);
+    definition.items  = await this.loadEntities(bundle, areaName, 'items', this.state.ItemFactory,this.state);
     Logger.verbose(`\t\tLOAD: NPCs...`);
-    definition.npcs   = await this.loadEntities(bundle, areaName, 'npcs', this.state.MobFactory);
+    definition.npcs   = await this.loadEntities(bundle, areaName, 'npcs', this.state.MobFactory,this.state);
     Logger.verbose(`\t\tLOAD: Rooms...`);
-    definition.rooms  = await this.loadEntities(bundle, areaName, 'rooms', this.state.RoomFactory);
+    definition.rooms  = await this.loadEntities(bundle, areaName, 'rooms', this.state.RoomFactory,this.state);
     Logger.verbose('\t\tDone.');
 
     for (const npcRef of definition.npcs) {
