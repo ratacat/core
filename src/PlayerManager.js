@@ -108,8 +108,12 @@ class PlayerManager extends EventEmitter {
     if (!this.loader) {
       throw new Error('No entity loader configured for players');
     }
-
-    const data = await this.loader.fetch(username);
+	try {
+		var data = await this.loader.fetch(username);
+	} catch(e){
+		return null
+	}
+    
     data.name = username;
 
     let player = new Player(data);
