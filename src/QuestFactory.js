@@ -50,7 +50,11 @@ class QuestFactory {
 
     if (tracker.isActive(questRef)) {
       return false;
-    }
+	}
+	
+	if (player.level < quest.config.level){
+		return false;
+	}
 
     if (!quest.config.requires) {
       return true;
