@@ -107,6 +107,11 @@ class Npc extends Scriptable(Character) {
   get isNpc() {
     return true;
   }
+
+  queueCommand(executable, lag) {
+    const index = this.commandQueue.enqueue(executable, lag);
+    this.emit('commandQueued', index);
+  }
 }
 
 module.exports = Npc;
