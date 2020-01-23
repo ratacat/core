@@ -94,7 +94,9 @@ class Skill {
         if (npc.getBehavior('combat') == true) {
           player.initiateCombat(npc)
         }
-      });
+	  });
+	} else if (!target.isNpc ) {
+		//don't initiate on players
     } else if (target !== player && target.getBehavior('combat') !== true && !(target instanceof Item)){
       player.emit('attackedNonCombatant');
       return false;
