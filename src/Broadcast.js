@@ -135,6 +135,9 @@ class Broadcast {
    * @see {@link Broadcast#at}
    */
   static sayAt(source, message, wrapWidth, useColor, formatter) {
+	  if (message === false){
+		  return false
+	  }
     Broadcast.at(source, message, wrapWidth, useColor, (target, message) => {
       return (formatter ? formatter(target, message) : message ) + '\r\n';
     });
@@ -145,6 +148,9 @@ class Broadcast {
    * @see {@link Broadcast#atExcept}
    */
   static sayAtExcept(source, message, excludes, wrapWidth, useColor, formatter) {
+	if (message === false){
+		return false
+	}
     Broadcast.atExcept(source, message, excludes, wrapWidth, useColor, (target, message) => {
       return (formatter ? formatter(target, message) : message ) + '\r\n';
     });
