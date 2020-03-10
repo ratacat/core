@@ -19,8 +19,6 @@ const util = require('util');
 class PlayerManager extends EventEmitter {
   constructor() {
 	super();
-	this.logins = new Set();
-	this.stats = {};
     this.players = new Map();
     this.events = new EventManager();
     this.loader = null;
