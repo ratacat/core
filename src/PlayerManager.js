@@ -155,7 +155,7 @@ class PlayerManager extends EventEmitter {
     } catch (err) {
       Logger.error(`${player.name} failed to serialize.`);
       Logger.error(err.stack);
-      Logger.error(util.inspect(player.metadata));
+      //Logger.error(util.inspect(player.metadata));
     }
 
     /**

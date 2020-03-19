@@ -5,7 +5,8 @@
  */
 class Party extends Set {
   constructor(leader) {
-    super();
+	super();
+	if (!leader)return
     this.invited = new Set();
     this.leader = leader;
     this.add(leader);
@@ -18,8 +19,9 @@ class Party extends Set {
 
   add(member) {
     super.add(member);
-    member.party = this;
-    this.invited.delete(member);
+	member.party = this;
+	if (this.invited){
+    this.invited.delete(member);}
   }
 
   disband() {
