@@ -20,7 +20,7 @@ class MobManager {
    * @param {Mob} mob
    */
   removeMob(mob) {
-    mob.effects.clear();
+    //mob.effects.clear();
     const room = mob.room;
     if (room) {
       room.area.removeNpc(mob);
