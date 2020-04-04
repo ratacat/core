@@ -26,6 +26,7 @@ class DataSourceRegistry extends Map {
 
       // relative path to require
       if (settings.require[0] === '.') {
+		settings.require = settings.require.replace(".","")
         loader = require(rootPath + '/' + settings.require);
       } else if (!settings.require.includes('.')) {
         loader = require(settings.require);

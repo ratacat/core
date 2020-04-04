@@ -10,7 +10,8 @@ class EntityLoader {
    */
   constructor(dataSource, config = {}) {
     this.dataSource = dataSource;
-    this.config = config;
+	this.config = config;
+	this.init()
   }
 
   setArea(name) {
@@ -19,6 +20,11 @@ class EntityLoader {
 
   setBundle(name) {
     this.config.bundle = name;
+  }
+
+  init(){
+	if (!this.dataSource.init || typeof this.dataSource.init !== "function") return
+	this.config.db = this.dataSource.init(this.config);
   }
 
   hasData() {
